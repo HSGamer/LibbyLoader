@@ -1,0 +1,6 @@
+name: LibbyLoader
+version: '${project.version}'
+main: me.hsgamer.libbyloader.bukkit.LibbyLoaderBukkit
+api-version: 1.13
+load: STARTUP
+authors: [ HSGamer ]
