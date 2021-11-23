@@ -32,13 +32,4 @@ public class BukkitLibraryManagerWrapper extends LibraryManagerWrapper {
         MainConfig.EXTERNAL_REPOSITORIES.setValue(repositories);
         MainConfig.EXTERNAL_REPOSITORIES.getConfig().save();
     }
-
-    @Override
-    public void addLibrary(Library library) {
-        super.addLibrary(library);
-        List<Library> libraries = MainConfig.PRELOAD_LIBRARIES.getValue();
-        libraries.add(library);
-        MainConfig.PRELOAD_LIBRARIES.setValue(libraries);
-        MainConfig.PRELOAD_LIBRARIES.getConfig().save();
-    }
 }

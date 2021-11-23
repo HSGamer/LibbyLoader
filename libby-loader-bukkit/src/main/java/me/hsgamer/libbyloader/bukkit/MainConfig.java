@@ -47,7 +47,7 @@ public class MainConfig extends PathableConfig {
                 boolean isolated = Optional.ofNullable(value.get(ISOLATED))
                         .map(Object::toString)
                         .map(Boolean::parseBoolean)
-                        .orElse(true);
+                        .orElse(false);
                 builder.isolatedLoad(isolated);
                 list.add(builder.build());
             });
