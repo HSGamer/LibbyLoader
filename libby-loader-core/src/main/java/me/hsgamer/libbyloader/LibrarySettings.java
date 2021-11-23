@@ -2,9 +2,7 @@ package me.hsgamer.libbyloader;
 
 import net.byteflux.libby.Library;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public final class LibrarySettings {
     public static final String GROUP_ID = "group-id";
@@ -13,6 +11,7 @@ public final class LibrarySettings {
     public static final String CHECKSUM = "checksum";
     public static final String CLASSIFIER = "classifier";
     public static final String ISOLATED = "isolated";
+    public static final String RELOCATIONS = "relocations";
 
     private LibrarySettings() {
         // EMPTY
@@ -32,6 +31,25 @@ public final class LibrarySettings {
         if (map.containsKey(CHECKSUM)) {
             builder.checksum(String.valueOf(map.get(CHECKSUM)));
         }
+        if (map.containsKey(RELOCATIONS)) {
+            Object relocations = map.get(RELOCATIONS);
+            if (relocations instanceof List) {
+                List<?> list = (List<?>) relocations;
+                for (Object o : list) {
+                    if (o instanceof Map) {
+                        Map<String, Object> mapped = new LinkedHashMap<>();
+                        ((Map<?, ?>) o).forEach((k, v) -> mapped.put(String.valueOf(k), v));
+                        builder.relocate(RelocationSettings.deserialize(mapped));
+                    } else if (o instanceof String) {
+                        String[] split = ((String) o).split(":", 2);
+                        if (split.length == 2) {
+                            builder.relocate(split[0], split[1]);
+                        }
+                    }
+                }
+            }
+        }
+
         Optional.ofNullable(map.get(ISOLATED))
                 .map(Object::toString)
                 .map(Boolean::parseBoolean)
@@ -50,6 +68,11 @@ public final class LibrarySettings {
         }
         if (library.hasChecksum()) {
             map.put(CHECKSUM, library.getChecksum());
+        }
+        if (library.hasRelocations()) {
+            List<Object> list = new ArrayList<>();
+            library.getRelocations().forEach(relocation -> list.add(RelocationSettings.serialize(relocation)));
+            map.put(RELOCATIONS, list);
         }
         map.put(ISOLATED, library.isIsolatedLoad());
         return map;
