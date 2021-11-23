@@ -14,12 +14,11 @@ public class LibraryManagerWrapper {
     }
 
     public void setup() {
-        getExternalRepositories().forEach(libraryManager::addRepository);
+        libraryManager.addMavenLocal();
+        libraryManager.addMavenCentral();
         libraryManager.addJCenter();
         libraryManager.addJitPack();
-        libraryManager.addMavenCentral();
-        libraryManager.addMavenLocal();
-
+        getExternalRepositories().forEach(libraryManager::addRepository);
         getPreloadLibraries().forEach(libraryManager::loadLibrary);
     }
 
