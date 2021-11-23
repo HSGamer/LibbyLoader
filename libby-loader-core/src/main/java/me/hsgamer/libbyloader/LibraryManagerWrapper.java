@@ -31,12 +31,16 @@ public class LibraryManagerWrapper {
         return Collections.emptyList();
     }
 
-    public void addLibrary(Library library) {
-        libraryManager.loadLibrary(library);
+    public void addLibrary(Library... libraries) {
+        for (Library library : libraries) {
+            libraryManager.loadLibrary(library);
+        }
     }
 
-    public void addRepository(String repository) {
-        libraryManager.addRepository(repository);
+    public void addRepository(String... repositories) {
+        for (String repository : repositories) {
+            libraryManager.addRepository(repository);
+        }
     }
 
     public LibraryManager getLibraryManager() {
