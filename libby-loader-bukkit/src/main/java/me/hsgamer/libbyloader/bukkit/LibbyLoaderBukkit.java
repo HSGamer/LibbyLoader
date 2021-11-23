@@ -1,5 +1,6 @@
 package me.hsgamer.libbyloader.bukkit;
 
+import me.hsgamer.libbyloader.api.LibbyLoaderAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LibbyLoaderBukkit extends JavaPlugin {
@@ -9,6 +10,7 @@ public final class LibbyLoaderBukkit extends JavaPlugin {
     public LibbyLoaderBukkit() {
         mainConfig.setup();
         manager.setup();
+        LibbyLoaderAPI.setManager(manager);
     }
 
     public MainConfig getMainConfig() {
