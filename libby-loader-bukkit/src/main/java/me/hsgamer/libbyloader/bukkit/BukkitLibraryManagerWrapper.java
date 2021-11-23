@@ -5,7 +5,6 @@ import net.byteflux.libby.BukkitLibraryManager;
 import net.byteflux.libby.Library;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BukkitLibraryManagerWrapper extends LibraryManagerWrapper {
@@ -27,7 +26,11 @@ public class BukkitLibraryManagerWrapper extends LibraryManagerWrapper {
     public void addRepository(String... repositories) {
         super.addRepository(repositories);
         List<String> configRepositories = MainConfig.EXTERNAL_REPOSITORIES.getValue();
-        configRepositories.addAll(Arrays.asList(repositories));
+        for (String repository : repositories) {
+            if (!configRepositories.contains(repository)) {
+                configRepositories.add(repository);
+            }
+        }
         MainConfig.EXTERNAL_REPOSITORIES.setValue(configRepositories);
         MainConfig.EXTERNAL_REPOSITORIES.getConfig().save();
     }
