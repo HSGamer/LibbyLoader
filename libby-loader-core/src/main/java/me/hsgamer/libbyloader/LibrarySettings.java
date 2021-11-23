@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public final class LibrarySettingConstants {
+public final class LibrarySettings {
     public static final String GROUP_ID = "group-id";
     public static final String ARTIFACT_ID = "artifact-id";
     public static final String VERSION = "version";
@@ -14,7 +14,7 @@ public final class LibrarySettingConstants {
     public static final String CLASSIFIER = "classifier";
     public static final String ISOLATED = "isolated";
 
-    private LibrarySettingConstants() {
+    private LibrarySettings() {
         // EMPTY
     }
 

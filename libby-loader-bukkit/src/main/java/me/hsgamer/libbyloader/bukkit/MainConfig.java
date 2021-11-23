@@ -3,7 +3,7 @@ package me.hsgamer.libbyloader.bukkit;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.*;
-import me.hsgamer.libbyloader.LibrarySettingConstants;
+import me.hsgamer.libbyloader.LibrarySettings;
 import net.byteflux.libby.Library;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public class MainConfig extends PathableConfig {
             List<Library> list = new ArrayList<>();
             rawValue.forEach((key, value) -> {
                 try {
-                    Library.Builder builder = LibrarySettingConstants.deserialize(value);
+                    Library.Builder builder = LibrarySettings.deserialize(value);
                     builder.id(key);
                     list.add(builder.build());
                 } catch (Exception ignored) {
@@ -44,7 +44,7 @@ public class MainConfig extends PathableConfig {
         public @NotNull Map<String, Map<String, Object>> convertToRaw(@NotNull List<Library> value) {
             Map<String, Map<String, Object>> map = new LinkedHashMap<>();
             value.forEach(library -> {
-                Map<String, Object> options = LibrarySettingConstants.serialize(library);
+                Map<String, Object> options = LibrarySettings.serialize(library);
                 map.put(library.getId(), options);
             });
             return map;
