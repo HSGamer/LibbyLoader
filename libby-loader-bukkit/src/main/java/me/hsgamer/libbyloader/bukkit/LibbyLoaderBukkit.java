@@ -1,13 +1,16 @@
 package me.hsgamer.libbyloader.bukkit;
 
-import me.hsgamer.libbyloader.api.LibbyLoaderAPI;
-import org.bukkit.plugin.java.JavaPlugin;
+import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.libbyloader.LibbyLoaderAPI;
 
-public final class LibbyLoaderBukkit extends JavaPlugin {
-    private final MainConfig mainConfig = new MainConfig(this);
-    private final BukkitLibraryManagerWrapper manager = new BukkitLibraryManagerWrapper(this);
+public class LibbyLoaderBukkit extends BasePlugin {
+    private MainConfig mainConfig;
+    private BukkitLibraryManagerWrapper manager;
 
-    public LibbyLoaderBukkit() {
+    @Override
+    public void preLoad() {
+        mainConfig = new MainConfig(this);
+        manager = new BukkitLibraryManagerWrapper(this);
         mainConfig.setup();
         manager.setup();
         LibbyLoaderAPI.setManager(manager);

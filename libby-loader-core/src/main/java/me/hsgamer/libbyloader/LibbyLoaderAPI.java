@@ -1,9 +1,11 @@
-package me.hsgamer.libbyloader.api;
+package me.hsgamer.libbyloader;
 
-import me.hsgamer.libbyloader.LibraryManagerWrapper;
-
-public class LibbyLoaderAPI {
+public final class LibbyLoaderAPI {
     private static LibraryManagerWrapper manager;
+
+    private LibbyLoaderAPI() {
+        // EMPTY
+    }
 
     public static LibraryManagerWrapper getManager() {
         return manager;
