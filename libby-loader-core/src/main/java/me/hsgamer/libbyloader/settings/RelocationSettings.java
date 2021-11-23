@@ -1,4 +1,4 @@
-package me.hsgamer.libbyloader;
+package me.hsgamer.libbyloader.settings;
 
 import me.hsgamer.hscore.common.CollectionUtils;
 import net.byteflux.libby.relocation.Relocation;

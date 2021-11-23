@@ -3,7 +3,7 @@ package me.hsgamer.libbyloader.bukkit;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.*;
-import me.hsgamer.libbyloader.LibrarySettings;
+import me.hsgamer.libbyloader.settings.LibrarySettings;
 import net.byteflux.libby.Library;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;

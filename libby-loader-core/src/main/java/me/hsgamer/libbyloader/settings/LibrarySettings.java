@@ -1,4 +1,4 @@
-package me.hsgamer.libbyloader;
+package me.hsgamer.libbyloader.settings;
 
 import net.byteflux.libby.Library;
 
