@@ -18,7 +18,7 @@ public final class LibbyLoaderAPI {
             library1.getArtifactId().equals(library2.getArtifactId())
                     && library1.getGroupId().equals(library2.getGroupId())
                     && library1.getVersion().equals(library2.getVersion())
-                    && library1.getClassifier().equals(library2.getClassifier());
+                    && Objects.equals(library1.getClassifier(), library2.getClassifier());
     private static final BiPredicate<Library, Library> ISOLATED_CHECKER = (library1, library2) ->
             DEFAULT_CHECKER.test(library1, library2)
                     && library1.isIsolatedLoad() == library2.isIsolatedLoad()
@@ -61,12 +61,12 @@ public final class LibbyLoaderAPI {
             throw new IllegalArgumentException("Bad artifact coordinates " + coords
                     + ", expected format is <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>");
         }
-        return Library.builder()
+        Library.Builder builder = Library.builder()
                 .groupId(m.group(1))
                 .artifactId(m.group(2))
-                .classifier(Optional.ofNullable(m.group(6)).orElse(""))
-                .version(m.group(7))
-                .build();
+                .version(m.group(7));
+        Optional.ofNullable(m.group(6)).ifPresent(builder::classifier);
+        return builder.build();
     }
 
     /**

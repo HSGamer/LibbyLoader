@@ -1,5 +1,6 @@
 package me.hsgamer.libbyloader.settings;
 
+import me.hsgamer.hscore.common.CollectionUtils;
 import net.byteflux.libby.Library;
 
 import java.util.*;
@@ -13,6 +14,8 @@ public final class LibrarySettings {
     public static final String CLASSIFIER = "classifier";
     public static final String ISOLATED = "isolated";
     public static final String RELOCATIONS = "relocations";
+    public static final String REPOSITORIES = "repositories";
+    public static final String URLS = "urls";
 
     private LibrarySettings() {
         // EMPTY
@@ -26,38 +29,42 @@ public final class LibrarySettings {
                 .groupId(String.valueOf(map.get(GROUP_ID)))
                 .artifactId(String.valueOf(map.get(ARTIFACT_ID)))
                 .version(String.valueOf(map.get(VERSION)));
-        if (map.containsKey(ID)) {
-            builder.id(String.valueOf(map.get(ID)));
-        }
-        if (map.containsKey(CLASSIFIER)) {
-            builder.classifier(String.valueOf(map.get(CLASSIFIER)));
-        }
-        if (map.containsKey(CHECKSUM)) {
-            builder.checksum(String.valueOf(map.get(CHECKSUM)));
-        }
-        if (map.containsKey(RELOCATIONS)) {
-            Object relocations = map.get(RELOCATIONS);
-            if (relocations instanceof List) {
-                List<?> list = (List<?>) relocations;
-                for (Object o : list) {
-                    if (o instanceof Map) {
-                        Map<String, Object> mapped = new LinkedHashMap<>();
-                        ((Map<?, ?>) o).forEach((k, v) -> mapped.put(String.valueOf(k), v));
-                        builder.relocate(RelocationSettings.deserialize(mapped));
-                    } else if (o instanceof String) {
-                        String[] split = ((String) o).split(":", 2);
-                        if (split.length == 2) {
-                            builder.relocate(split[0], split[1]);
-                        }
-                    }
-                }
-            }
-        }
-
+        Optional.ofNullable(map.get(ID))
+                .map(String::valueOf)
+                .ifPresent(builder::id);
+        Optional.ofNullable(map.get(CLASSIFIER))
+                .map(String::valueOf)
+                .ifPresent(builder::classifier);
+        Optional.ofNullable(map.get(CHECKSUM))
+                .map(String::valueOf)
+                .ifPresent(builder::checksum);
         Optional.ofNullable(map.get(ISOLATED))
-                .map(Object::toString)
+                .map(String::valueOf)
                 .map(Boolean::parseBoolean)
                 .ifPresent(builder::isolatedLoad);
+        Optional.ofNullable(map.get(RELOCATIONS))
+                .filter(List.class::isInstance)
+                .map(List.class::cast)
+                .ifPresent(list -> {
+                    for (Object o : list) {
+                        if (o instanceof Map) {
+                            Map<String, Object> mapped = new LinkedHashMap<>();
+                            ((Map<?, ?>) o).forEach((k, v) -> mapped.put(String.valueOf(k), v));
+                            builder.relocate(RelocationSettings.deserialize(mapped));
+                        } else if (o instanceof String) {
+                            String[] split = ((String) o).split(":", 2);
+                            if (split.length == 2) {
+                                builder.relocate(split[0], split[1]);
+                            }
+                        }
+                    }
+                });
+        Optional.ofNullable(map.get(REPOSITORIES))
+                .map(o -> CollectionUtils.createStringListFromObject(o, true))
+                .ifPresent(repositories -> repositories.forEach(builder::repository));
+        Optional.ofNullable(map.get(URLS))
+                .map(o -> CollectionUtils.createStringListFromObject(o, true))
+                .ifPresent(urls -> urls.forEach(builder::url));
 
         return builder;
     }
@@ -81,6 +88,14 @@ public final class LibrarySettings {
         }
         if (library.isIsolatedLoad()) {
             map.put(ISOLATED, library.isIsolatedLoad());
+        }
+        Collection<String> repositories = library.getRepositories();
+        if (!repositories.isEmpty()) {
+            map.put(REPOSITORIES, repositories);
+        }
+        Collection<String> urls = library.getUrls();
+        if (!urls.isEmpty()) {
+            map.put(URLS, urls);
         }
         return map;
     }
