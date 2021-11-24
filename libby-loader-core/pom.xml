@@ -16,13 +16,11 @@
             <groupId>net.byteflux</groupId>
             <artifactId>libby-core</artifactId>
             <version>${libby.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-common</artifactId>
             <version>${core.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
