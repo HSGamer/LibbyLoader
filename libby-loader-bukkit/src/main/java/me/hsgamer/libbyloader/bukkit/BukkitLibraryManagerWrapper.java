@@ -23,16 +23,16 @@ public class BukkitLibraryManagerWrapper extends LibraryManagerWrapper {
     }
 
     @Override
-    public void addLibrary(Library... libraries) {
-        super.addLibrary(libraries);
+    public void loadLibrary(Library... libraries) {
+        super.loadLibrary(libraries);
         if (MainConfig.ADD_LIBRARIES_TO_CONFIG.getValue()) {
             MainConfig.addLibrary(libraries);
         }
     }
 
     @Override
-    public void addRepository(String... repositories) {
-        super.addRepository(repositories);
+    public void loadRepository(String... repositories) {
+        super.loadRepository(repositories);
         if (MainConfig.ADD_REPOSITORIES_TO_CONFIG.getValue()) {
             MainConfig.addRepository(repositories);
         }

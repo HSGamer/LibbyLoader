@@ -16,8 +16,8 @@ public class LibraryManagerWrapper {
     }
 
     public void setup() {
-        getExternalRepositories().forEach(this::loadRepository);
-        getPreloadLibraries().forEach(this::loadLibrary);
+        getExternalRepositories().forEach(this::addRepository);
+        getPreloadLibraries().forEach(this::addLibrary);
     }
 
     protected List<String> getExternalRepositories() {
@@ -28,26 +28,26 @@ public class LibraryManagerWrapper {
         return Collections.emptyList();
     }
 
-    private void loadLibrary(Library library) {
+    private void addLibrary(Library library) {
         if (LibbyLoaderAPI.isLibraryNotExists(loadedLibraries, library)) {
             libraryManager.loadLibrary(library);
             loadedLibraries.add(library);
         }
     }
 
-    private void loadRepository(String repository) {
+    private void addRepository(String repository) {
         libraryManager.addRepository(repository);
     }
 
-    public void addLibrary(Library... libraries) {
+    public void loadLibrary(Library... libraries) {
         for (Library library : libraries) {
-            this.loadLibrary(library);
+            this.addLibrary(library);
         }
     }
 
-    public void addRepository(String... repositories) {
+    public void loadRepository(String... repositories) {
         for (String repository : repositories) {
-            this.loadRepository(repository);
+            this.addRepository(repository);
         }
     }
 

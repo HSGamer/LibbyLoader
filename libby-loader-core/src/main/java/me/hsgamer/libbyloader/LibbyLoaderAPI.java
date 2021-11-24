@@ -49,6 +49,32 @@ public final class LibbyLoaderAPI {
     }
 
     /**
+     * Load the libraries
+     *
+     * @param libraries the libraries
+     * @see LibraryManagerWrapper#loadLibrary(Library...)
+     */
+    public static void loadLibrary(Library... libraries) {
+        if (manager == null) {
+            throw new IllegalStateException("The manager is not set");
+        }
+        manager.loadLibrary(libraries);
+    }
+
+    /**
+     * Load the repositories
+     *
+     * @param repositories the repositories
+     * @see LibraryManagerWrapper#loadRepository(String...)
+     */
+    public static void loadRepository(String... repositories) {
+        if (manager == null) {
+            throw new IllegalStateException("The manager is not set");
+        }
+        manager.loadRepository(repositories);
+    }
+
+    /**
      * Get the library by the coordinate
      *
      * @param coords the coordinate
