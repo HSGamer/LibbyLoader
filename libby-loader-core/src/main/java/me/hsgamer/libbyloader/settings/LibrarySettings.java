@@ -5,6 +5,7 @@ import net.byteflux.libby.Library;
 import java.util.*;
 
 public final class LibrarySettings {
+    public static final String ID = "id";
     public static final String GROUP_ID = "group-id";
     public static final String ARTIFACT_ID = "artifact-id";
     public static final String VERSION = "version";
@@ -25,6 +26,9 @@ public final class LibrarySettings {
                 .groupId(String.valueOf(map.get(GROUP_ID)))
                 .artifactId(String.valueOf(map.get(ARTIFACT_ID)))
                 .version(String.valueOf(map.get(VERSION)));
+        if (map.containsKey(ID)) {
+            builder.id(String.valueOf(map.get(ID)));
+        }
         if (map.containsKey(CLASSIFIER)) {
             builder.classifier(String.valueOf(map.get(CLASSIFIER)));
         }
@@ -60,6 +64,7 @@ public final class LibrarySettings {
 
     public static Map<String, Object> serialize(Library library) {
         Map<String, Object> map = new LinkedHashMap<>();
+        map.put(ID, library.getId());
         map.put(GROUP_ID, library.getGroupId());
         map.put(ARTIFACT_ID, library.getArtifactId());
         map.put(VERSION, library.getVersion());

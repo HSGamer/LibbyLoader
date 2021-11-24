@@ -2,12 +2,25 @@ package me.hsgamer.libbyloader;
 
 import net.byteflux.libby.Library;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class LibbyLoaderAPI {
     private static final Pattern COORDINATE_PATTERN = Pattern.compile("([^: ]+):([^: ]+)(:([^: ]*)(:([^: ]+))?)?:([^: ]+)");
+    private static final BiPredicate<Library, Library> DEFAULT_CHECKER = (library1, library2) ->
+            library1.getArtifactId().equals(library2.getArtifactId())
+                    && library1.getGroupId().equals(library2.getGroupId())
+                    && library1.getVersion().equals(library2.getVersion())
+                    && library1.getClassifier().equals(library2.getClassifier());
+    private static final BiPredicate<Library, Library> ISOLATED_CHECKER = (library1, library2) ->
+            DEFAULT_CHECKER.test(library1, library2)
+                    && library1.isIsolatedLoad() == library2.isIsolatedLoad()
+                    && Objects.equals(library1.getId(), library2.getId());
+
     private static LibraryManagerWrapper manager;
 
     private LibbyLoaderAPI() {
@@ -41,5 +54,22 @@ public final class LibbyLoaderAPI {
                 .classifier(Optional.ofNullable(m.group(6)).orElse(""))
                 .version(m.group(7))
                 .build();
+    }
+
+    public static boolean combineLibraries(List<Library> libraries, Library... librariesToAdd) {
+        boolean changed = false;
+        for (Library library : librariesToAdd) {
+            if (libraries.parallelStream().noneMatch(library1 -> {
+                if (library.isIsolatedLoad()) {
+                    return ISOLATED_CHECKER.test(library1, library);
+                } else {
+                    return DEFAULT_CHECKER.test(library1, library);
+                }
+            })) {
+                libraries.add(library);
+                changed = true;
+            }
+        }
+        return changed;
     }
 }
