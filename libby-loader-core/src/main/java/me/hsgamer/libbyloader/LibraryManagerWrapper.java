@@ -33,7 +33,7 @@ public class LibraryManagerWrapper {
     public void addLibrary(Library... libraries) {
         List<Library> preloadLibraries = getPreloadLibraries();
         for (Library library : libraries) {
-            if (!LibbyLoaderAPI.isLibraryExists(preloadLibraries, library)) {
+            if (LibbyLoaderAPI.isLibraryNotExists(preloadLibraries, library)) {
                 libraryManager.loadLibrary(library);
             }
         }
