@@ -79,7 +79,9 @@ public final class LibrarySettings {
             library.getRelocations().forEach(relocation -> list.add(RelocationSettings.serialize(relocation)));
             map.put(RELOCATIONS, list);
         }
-        map.put(ISOLATED, library.isIsolatedLoad());
+        if (library.isIsolatedLoad()) {
+            map.put(ISOLATED, library.isIsolatedLoad());
+        }
         return map;
     }
 }
