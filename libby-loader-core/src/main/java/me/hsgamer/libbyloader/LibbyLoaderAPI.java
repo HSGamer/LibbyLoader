@@ -9,6 +9,9 @@ import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The API for library loader & manager
+ */
 public final class LibbyLoaderAPI {
     private static final Pattern COORDINATE_PATTERN = Pattern.compile("([^: ]+):([^: ]+)(:([^: ]*)(:([^: ]+))?)?:([^: ]+)");
     private static final BiPredicate<Library, Library> DEFAULT_CHECKER = (library1, library2) ->
@@ -27,10 +30,20 @@ public final class LibbyLoaderAPI {
         // EMPTY
     }
 
+    /**
+     * Get the library manager
+     *
+     * @return the library manager
+     */
     public static LibraryManagerWrapper getManager() {
         return manager;
     }
 
+    /**
+     * Set the library manager
+     *
+     * @param manager the library manager
+     */
     public static void setManager(LibraryManagerWrapper manager) {
         LibbyLoaderAPI.manager = manager;
     }
@@ -56,6 +69,13 @@ public final class LibbyLoaderAPI {
                 .build();
     }
 
+    /**
+     * Check if the library does not exist in the list
+     *
+     * @param libraries the list of libraries
+     * @param library   the library
+     * @return true if the library does not exist in the list
+     */
     public static boolean isLibraryNotExists(List<Library> libraries, Library library) {
         return libraries.parallelStream().noneMatch(library1 -> {
             if (library.isIsolatedLoad()) {
@@ -66,6 +86,13 @@ public final class LibbyLoaderAPI {
         });
     }
 
+    /**
+     * Add the libraries to the list
+     *
+     * @param libraries      the list of libraries
+     * @param librariesToAdd the libraries to add
+     * @return true if any library is added
+     */
     public static boolean combineLibraries(List<Library> libraries, Library... librariesToAdd) {
         boolean changed = false;
         for (Library library : librariesToAdd) {
