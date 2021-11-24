@@ -56,16 +56,20 @@ public final class LibbyLoaderAPI {
                 .build();
     }
 
+    public static boolean isLibraryExists(List<Library> libraries, Library library) {
+        return libraries.parallelStream().anyMatch(library1 -> {
+            if (library.isIsolatedLoad()) {
+                return ISOLATED_CHECKER.test(library1, library);
+            } else {
+                return DEFAULT_CHECKER.test(library1, library);
+            }
+        });
+    }
+
     public static boolean combineLibraries(List<Library> libraries, Library... librariesToAdd) {
         boolean changed = false;
         for (Library library : librariesToAdd) {
-            if (libraries.parallelStream().noneMatch(library1 -> {
-                if (library.isIsolatedLoad()) {
-                    return ISOLATED_CHECKER.test(library1, library);
-                } else {
-                    return DEFAULT_CHECKER.test(library1, library);
-                }
-            })) {
+            if (!isLibraryExists(libraries, library)) {
                 libraries.add(library);
                 changed = true;
             }
