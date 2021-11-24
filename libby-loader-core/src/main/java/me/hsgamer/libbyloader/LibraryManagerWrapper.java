@@ -54,4 +54,8 @@ public class LibraryManagerWrapper {
     public LibraryManager getLibraryManager() {
         return libraryManager;
     }
+
+    public List<Library> getLoadedLibraries() {
+        return loadedLibraries;
+    }
 }
