@@ -7,6 +7,7 @@ import me.hsgamer.hscore.config.path.BooleanConfigPath;
 import me.hsgamer.libbyloader.LibbyLoaderAPI;
 import me.hsgamer.libbyloader.settings.LibrarySettings;
 import net.byteflux.libby.Library;
+import net.byteflux.libby.Repositories;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,8 @@ public class MainConfig extends PathableConfig {
     public static final BooleanConfigPath ADD_LIBRARIES_TO_CONFIG = new BooleanConfigPath("add-libraries-to-config", false);
     public static final BooleanConfigPath ADD_REPOSITORIES_TO_CONFIG = new BooleanConfigPath("add-repositories-to-config", false);
     public static final ConfigPath<List<String>> EXTERNAL_REPOSITORIES = new BaseConfigPath<>(
-            "external-repositories", Collections.emptyList(),
+            "external-repositories",
+            Arrays.asList(Repositories.JCENTER, Repositories.JITPACK, Repositories.MAVEN_CENTRAL, Repositories.SONATYPE),
             o -> CollectionUtils.createStringListFromObject(o, true)
     );
     public static final ConfigPath<List<Library>> PRELOAD_LIBRARIES = new AdvancedConfigPath<List<Map<String, Object>>, List<Library>>(
