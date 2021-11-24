@@ -3,10 +3,12 @@ package me.hsgamer.libbyloader;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class LibraryManagerWrapper {
+    private final List<Library> loadedLibraries = new ArrayList<>();
     private final LibraryManager libraryManager;
 
     public LibraryManagerWrapper(LibraryManager libraryManager) {
@@ -14,8 +16,8 @@ public class LibraryManagerWrapper {
     }
 
     public void setup() {
-        getExternalRepositories().forEach(libraryManager::addRepository);
-        getPreloadLibraries().forEach(libraryManager::loadLibrary);
+        getExternalRepositories().forEach(this::loadRepository);
+        getPreloadLibraries().forEach(this::loadLibrary);
     }
 
     protected List<String> getExternalRepositories() {
@@ -26,18 +28,26 @@ public class LibraryManagerWrapper {
         return Collections.emptyList();
     }
 
+    private void loadLibrary(Library library) {
+        if (LibbyLoaderAPI.isLibraryNotExists(loadedLibraries, library)) {
+            libraryManager.loadLibrary(library);
+            loadedLibraries.add(library);
+        }
+    }
+
+    private void loadRepository(String repository) {
+        libraryManager.addRepository(repository);
+    }
+
     public void addLibrary(Library... libraries) {
-        List<Library> preloadLibraries = getPreloadLibraries();
         for (Library library : libraries) {
-            if (LibbyLoaderAPI.isLibraryNotExists(preloadLibraries, library)) {
-                libraryManager.loadLibrary(library);
-            }
+            this.loadLibrary(library);
         }
     }
 
     public void addRepository(String... repositories) {
         for (String repository : repositories) {
-            libraryManager.addRepository(repository);
+            this.loadRepository(repository);
         }
     }
 
