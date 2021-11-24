@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class MainConfig extends PathableConfig {
-    public static final BooleanConfigPath ADD_LIBRARIES_TO_CONFIG = new BooleanConfigPath("add-libraries-to-config", true);
-    public static final BooleanConfigPath ADD_REPOSITORIES_TO_CONFIG = new BooleanConfigPath("add-repositories-to-config", true);
+    public static final BooleanConfigPath ADD_LIBRARIES_TO_CONFIG = new BooleanConfigPath("add-libraries-to-config", false);
+    public static final BooleanConfigPath ADD_REPOSITORIES_TO_CONFIG = new BooleanConfigPath("add-repositories-to-config", false);
     public static final ConfigPath<List<String>> EXTERNAL_REPOSITORIES = new BaseConfigPath<>(
             "external-repositories", Collections.emptyList(),
             o -> CollectionUtils.createStringListFromObject(o, true)
