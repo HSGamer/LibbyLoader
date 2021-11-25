@@ -2,6 +2,7 @@ package me.hsgamer.libbyloader;
 
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
+import net.byteflux.libby.classloader.IsolatedClassLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,5 +58,9 @@ public class LibraryManagerWrapper {
 
     public List<Library> getLoadedLibraries() {
         return loadedLibraries;
+    }
+
+    public IsolatedClassLoader getIsolatedClassLoader(String id) {
+        return libraryManager.getIsolatedClassLoaderOf(id);
     }
 }

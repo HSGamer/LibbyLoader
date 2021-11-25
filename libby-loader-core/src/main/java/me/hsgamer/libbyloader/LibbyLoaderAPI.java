@@ -1,6 +1,7 @@
 package me.hsgamer.libbyloader;
 
 import net.byteflux.libby.Library;
+import net.byteflux.libby.LibraryManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,28 +25,28 @@ public final class LibbyLoaderAPI {
                     && library1.isIsolatedLoad() == library2.isIsolatedLoad()
                     && Objects.equals(library1.getId(), library2.getId());
 
-    private static LibraryManagerWrapper manager;
+    private static LibraryManagerWrapper wrapper;
 
     private LibbyLoaderAPI() {
         // EMPTY
     }
 
     /**
-     * Get the library manager
+     * Get the library manager wrapper
      *
-     * @return the library manager
+     * @return the library manager wrapper
      */
-    public static LibraryManagerWrapper getManager() {
-        return manager;
+    public static LibraryManagerWrapper getWrapper() {
+        return wrapper;
     }
 
     /**
-     * Set the library manager
+     * Set the library manager wrapper
      *
-     * @param manager the library manager
+     * @param wrapper the library manager wrapper
      */
-    public static void setManager(LibraryManagerWrapper manager) {
-        LibbyLoaderAPI.manager = manager;
+    public static void setWrapper(LibraryManagerWrapper wrapper) {
+        LibbyLoaderAPI.wrapper = wrapper;
     }
 
     /**
@@ -55,10 +56,10 @@ public final class LibbyLoaderAPI {
      * @see LibraryManagerWrapper#loadLibrary(Library...)
      */
     public static void loadLibrary(Library... libraries) {
-        if (manager == null) {
+        if (wrapper == null) {
             throw new IllegalStateException("The manager is not set");
         }
-        manager.loadLibrary(libraries);
+        wrapper.loadLibrary(libraries);
     }
 
     /**
@@ -68,10 +69,10 @@ public final class LibbyLoaderAPI {
      * @see LibraryManagerWrapper#loadRepository(String...)
      */
     public static void loadRepository(String... repositories) {
-        if (manager == null) {
+        if (wrapper == null) {
             throw new IllegalStateException("The manager is not set");
         }
-        manager.loadRepository(repositories);
+        wrapper.loadRepository(repositories);
     }
 
     /**
@@ -128,5 +129,17 @@ public final class LibbyLoaderAPI {
             }
         }
         return changed;
+    }
+
+    /**
+     * Get the library manager
+     *
+     * @return the library manager
+     */
+    public LibraryManager getManager() {
+        if (wrapper == null) {
+            throw new IllegalStateException("The manager is not set");
+        }
+        return wrapper.getLibraryManager();
     }
 }

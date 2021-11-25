@@ -10,6 +10,6 @@ public class LibbyLoaderBukkit extends BasePlugin {
         mainConfig.setup();
         BukkitLibraryManagerWrapper manager = new BukkitLibraryManagerWrapper(this);
         manager.setup();
-        LibbyLoaderAPI.setManager(manager);
+        LibbyLoaderAPI.setWrapper(manager);
     }
 }
