@@ -20,10 +20,16 @@ public final class LibbyLoaderAPI {
                     && library1.getGroupId().equals(library2.getGroupId())
                     && library1.getVersion().equals(library2.getVersion())
                     && Objects.equals(library1.getClassifier(), library2.getClassifier());
-    private static final BiPredicate<Library, Library> ISOLATED_CHECKER = (library1, library2) ->
-            DEFAULT_CHECKER.test(library1, library2)
-                    && library1.isIsolatedLoad() == library2.isIsolatedLoad()
-                    && Objects.equals(library1.getId(), library2.getId());
+    private static final BiPredicate<Library, Library> ISOLATED_CHECKER = (loadedLibrary, checkLibrary) -> {
+        if (DEFAULT_CHECKER.test(loadedLibrary, checkLibrary)) {
+            if (loadedLibrary.isIsolatedLoad()) {
+                return Objects.equals(loadedLibrary.getId(), checkLibrary.getId());
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
 
     private static LibraryManagerWrapper wrapper;
 
@@ -99,18 +105,16 @@ public final class LibbyLoaderAPI {
     /**
      * Check if the library does not exist in the list
      *
-     * @param libraries the list of libraries
-     * @param library   the library
+     * @param libraries    the list of libraries
+     * @param checkLibrary the library to check
      * @return true if the library does not exist in the list
      */
-    public static boolean isLibraryNotExists(List<Library> libraries, Library library) {
-        return libraries.parallelStream().noneMatch(library1 -> {
-            if (library.isIsolatedLoad()) {
-                return ISOLATED_CHECKER.test(library1, library);
-            } else {
-                return DEFAULT_CHECKER.test(library1, library);
-            }
-        });
+    public static boolean isLibraryNotExists(List<Library> libraries, Library checkLibrary) {
+        return libraries.parallelStream().noneMatch(library ->
+                checkLibrary.isIsolatedLoad()
+                        ? ISOLATED_CHECKER.test(library, checkLibrary)
+                        : DEFAULT_CHECKER.test(library, checkLibrary)
+        );
     }
 
     /**
